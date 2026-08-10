@@ -1,8 +1,10 @@
 package com.narinc.rickandmorty.feature.character.list
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
@@ -29,17 +31,24 @@ import com.narinc.rickandmorty.feature.character.domain.model.Character
  */
 @Composable
 fun CharacterListScreen(
-    viewModel: CharacterListViewModel = hiltViewModel()
+    viewModel: CharacterListViewModel = hiltViewModel(),
+    onCharacterClick: (characterId: Int) -> Unit
 ) {
     val lazyPagingItems = viewModel.characterPagingData.collectAsLazyPagingItems()
 
     Column(modifier = Modifier.fillMaxSize()) {
-        CharacterList(lazyPagingItems = lazyPagingItems)
+        CharacterList(
+            lazyPagingItems = lazyPagingItems,
+            onCharacterClick = onCharacterClick
+        )
     }
 }
 
 @Composable
-private fun CharacterList(lazyPagingItems: LazyPagingItems<Character>) {
+private fun CharacterList(
+    lazyPagingItems: LazyPagingItems<Character>,
+    onCharacterClick: (characterId: Int) -> Unit
+) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         // ---- KAVRAM: itemKey ----
         // Recomposition sırasında Compose'un öğeleri doğru eşleştirmesi
@@ -50,7 +59,10 @@ private fun CharacterList(lazyPagingItems: LazyPagingItems<Character>) {
         ) { index ->
             val character = lazyPagingItems[index]
             if (character != null) {
-                CharacterRow(character = character)
+                CharacterRow(
+                    character = character,
+                    onClick = { onCharacterClick(character.id) }
+                )
                 HorizontalDivider()
             }
         }
@@ -63,9 +75,11 @@ private fun CharacterList(lazyPagingItems: LazyPagingItems<Character>) {
             is LoadState.Loading -> {
                 item { LoadingRow() }
             }
+
             is LoadState.Error -> {
                 item { Text("Daha fazla yüklenemedi", modifier = Modifier.padding(16.dp)) }
             }
+
             else -> Unit
         }
 
@@ -75,17 +89,22 @@ private fun CharacterList(lazyPagingItems: LazyPagingItems<Character>) {
             is LoadState.Loading -> {
                 item { LoadingRow() }
             }
+
             is LoadState.Error -> {
                 item { Text("Liste yüklenemedi", modifier = Modifier.padding(16.dp)) }
             }
+
             else -> Unit
         }
     }
 }
 
 @Composable
-private fun CharacterRow(character: Character) {
-    Column(modifier = Modifier.padding(16.dp)) {
+private fun CharacterRow(character: Character, onClick: () -> Unit) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .clickable(onClick = onClick)
+        .padding(16.dp)) {
         Text(text = character.name, style = MaterialTheme.typography.titleMedium)
         Text(text = character.species, style = MaterialTheme.typography.bodySmall)
     }
@@ -94,7 +113,9 @@ private fun CharacterRow(character: Character) {
 @Composable
 private fun LoadingRow() {
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

@@ -1,5 +1,6 @@
 package com.narinc.rickandmorty.feature.character.detail
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.narinc.rickandmorty.core.common.DataResult
@@ -39,17 +40,26 @@ import javax.inject.Inject
  * (CompositeDisposable ile), unutursan memory leak olurdu. Coroutine'de
  * viewModelScope, ViewModel'in onCleared() çağrıldığı anda İÇİNDEKİ TÜM
  * coroutine'leri OTOMATİK iptal eder. Elle dispose etmek yok.
+ *
+ * ---- KAVRAM: SavedStateHandle ----
+ * Hilt, bir ViewModel'e navigation argümanlarını otomatik olarak
+ * SavedStateHandle üzerinden enjekte edebilir -- Navigation Compose'un
+ * "characterId" argümanını burada okuyoruz. Ekstra güzel yanı: bu değer
+ * process ölüp yeniden başlasa bile (örn. sistem düşük bellekten
+ * Activity'yi öldürüp geri getirdiğinde) SavedStateHandle sayesinde kaybolmaz.
  */
 @HiltViewModel
 class CharacterDetailViewModel @Inject constructor(
-    private val getCharacterDetailUseCase: GetCharacterDetailUseCase
+    private val getCharacterDetailUseCase: GetCharacterDetailUseCase,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<CharacterDetailUiState>(CharacterDetailUiState.Loading)
     val uiState: StateFlow<CharacterDetailUiState> = _uiState.asStateFlow()
 
     init {
-        loadCharacter(id = 1) // Şimdilik sabit id=1 (Rick), navigation'a geçince dinamik olacak
+        val characterId: Int = savedStateHandle.get<String>("characterId")?.toIntOrNull() ?: 1
+        loadCharacter(id = characterId)
     }
 
     fun loadCharacter(id: Int) {

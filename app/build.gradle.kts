@@ -64,6 +64,8 @@ dependencies {
     implementation(libs.activity.compose)
     implementation(libs.lifecycle.runtime.ktx)
 
+    implementation(libs.navigation.compose)
+
     // Şimdilik sadece character dikeyini bağlıyoruz
     implementation(project(":core-common"))
     implementation(project(":core-network"))
@@ -71,4 +73,6 @@ dependencies {
     implementation(project(":character-data"))
     implementation(project(":feature-character-detail"))
     implementation(project(":feature-character-list"))
+    implementation(project(":navigation"))
+
 }

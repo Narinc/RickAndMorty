@@ -9,7 +9,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.narinc.rickandmorty.feature.character.detail.CharacterDetailScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -45,7 +44,7 @@ class MainActivity : ComponentActivity() {
 fun RickAndMortyApp() {
     MaterialTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            CharacterDetailScreen()
+            RickAndMortyNavHost()
         }
     }
 }
