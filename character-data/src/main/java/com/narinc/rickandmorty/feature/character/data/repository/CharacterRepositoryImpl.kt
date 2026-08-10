@@ -1,12 +1,17 @@
 package com.narinc.rickandmorty.feature.character.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.narinc.rickandmorty.core.common.DataResult
 import com.narinc.rickandmorty.core.common.DispatcherProvider
 import com.narinc.rickandmorty.core.common.safeApiCall
 import com.narinc.rickandmorty.core.network.RickAndMortyApiService
 import com.narinc.rickandmorty.feature.character.data.mapper.toDomain
+import com.narinc.rickandmorty.feature.character.data.paging.CharacterPagingSource
 import com.narinc.rickandmorty.feature.character.domain.model.Character
 import com.narinc.rickandmorty.feature.character.domain.repository.CharacterRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 /**
@@ -30,5 +35,25 @@ class CharacterRepositoryImpl @Inject constructor(
         return safeApiCall(dispatcherProvider) {
             apiService.getCharacterDetail(id).toDomain()
         }
+    }
+
+    /**
+     * ---- KAVRAM: Pager ----
+     * Pager, PagingSource'u sarmalayıp gerçek bir Flow<PagingData<T>>
+     * üreten fabrika. PagingConfig ile "kaç öğe geldiğinde bir sayfa daha
+     * iste", "ilk yüklemede kaç öğe getir" gibi davranışları ayarlıyoruz.
+     *
+     * pagingSourceFactory bir LAMBDA -- her yeni "generation" (örn. refresh
+     * sonrası) için TAZE bir PagingSource örneği üretmesi gerekiyor, bu
+     * yüzden var olan bir örneği değil, "nasıl üretileceğini" veriyoruz.
+     */
+    override fun getCharacters(): Flow<PagingData<Character>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { CharacterPagingSource(apiService) }
+        ).flow
     }
 }

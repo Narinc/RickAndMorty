@@ -69,4 +69,6 @@ dependencies {
     implementation(project(":core-network"))
     implementation(project(":character-domain"))
     implementation(project(":character-data"))
-    implementation(project(":feature-character-detail"))}
+    implementation(project(":feature-character-detail"))
+    implementation(project(":feature-character-list"))
+}
