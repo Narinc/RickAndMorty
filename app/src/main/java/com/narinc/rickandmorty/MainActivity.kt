@@ -6,10 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.narinc.rickandmorty.feature.character.detail.CharacterDetailScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -39,15 +39,13 @@ class MainActivity : ComponentActivity() {
  * Bu bir "fonksiyon" ama normal bir fonksiyon gibi davranmıyor. @Composable
  * annotation'ı, Kotlin compiler'ına "bu fonksiyon UI ağacı tanımlıyor,
  * içindeki state değiştiğinde bu fonksiyonu yeniden çalıştırabilirsin"
- * der. Şimdilik state yok, sadece statik bir metin basıyoruz -- bir
- * sonraki adımda ViewModel'den StateFlow okuyup buraya bağlayacağız,
- * orada "recomposition"ı canlı canlı göreceksin.
+ * der.
  */
 @Composable
 fun RickAndMortyApp() {
     MaterialTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            Text(text = "Merhaba Rick and Morty!")
+            CharacterDetailScreen()
         }
     }
 }
