@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -41,9 +42,15 @@ fun CharacterDetailScreen(
         is CharacterDetailUiState.Loading -> {
             LoadingContent()
         }
+
         is CharacterDetailUiState.Success -> {
-            CharacterContent(character = state.character)
+            CharacterContent(
+                character = state.character,
+                isFavorite = state.isFavorite,
+                onFavoriteClick = viewModel::onFavoriteClick
+            )
         }
+
         is CharacterDetailUiState.Error -> {
             ErrorContent(message = state.message)
         }
@@ -62,13 +69,25 @@ private fun LoadingContent() {
 }
 
 @Composable
-private fun CharacterContent(character: Character) {
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+private fun CharacterContent(
+    character: Character,
+    isFavorite: Boolean,
+    onFavoriteClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         Text(text = character.name, style = MaterialTheme.typography.headlineMedium)
         Text(text = "Tür: ${character.species}")
         Text(text = "Durum: ${character.status}")
         Text(text = "Köken: ${character.originName}")
         Text(text = "Konum: ${character.locationName}")
+
+        Button(onClick = onFavoriteClick) {
+            Text(if (isFavorite) "Favorilerden Çıkar" else "Favorilere Ekle")
+        }
     }
 }
 

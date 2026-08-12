@@ -3,7 +3,9 @@ package com.narinc.rickandmorty.feature.character.data.di
 import com.narinc.rickandmorty.core.common.DefaultDispatcherProvider
 import com.narinc.rickandmorty.core.common.DispatcherProvider
 import com.narinc.rickandmorty.feature.character.data.repository.CharacterRepositoryImpl
+import com.narinc.rickandmorty.feature.character.data.repository.InMemoryFavoriteRepository
 import com.narinc.rickandmorty.feature.character.domain.repository.CharacterRepository
+import com.narinc.rickandmorty.feature.character.domain.repository.FavoriteRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -41,6 +43,12 @@ abstract class CharacterDataModule {
     abstract fun bindCharacterRepository(
         impl: CharacterRepositoryImpl
     ): CharacterRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindFavoriteRepository(
+        impl: InMemoryFavoriteRepository
+    ): FavoriteRepository
 
     companion object {
         @Provides
