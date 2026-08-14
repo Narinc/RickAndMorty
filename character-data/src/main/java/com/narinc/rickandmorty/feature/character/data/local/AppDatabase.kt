@@ -2,8 +2,12 @@ package com.narinc.rickandmorty.feature.character.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.narinc.rickandmorty.feature.character.data.local.dao.CharacterDao
 import com.narinc.rickandmorty.feature.character.data.local.dao.FavoriteDao
+import com.narinc.rickandmorty.feature.character.data.local.dao.RemoteKeysDao
+import com.narinc.rickandmorty.feature.character.data.local.entity.CharacterEntity
 import com.narinc.rickandmorty.feature.character.data.local.entity.FavoriteEntity
+import com.narinc.rickandmorty.feature.character.data.local.entity.RemoteKeysEntity
 
 /**
  * ---- KAVRAM: @Database ----
@@ -17,10 +21,12 @@ import com.narinc.rickandmorty.feature.character.data.local.entity.FavoriteEntit
  * gövdesini de compile-time'da kendisi üretiyor.
  */
 @Database(
-    entities = [FavoriteEntity::class],
-    version = 1,
-    exportSchema = false
+    entities = [FavoriteEntity::class, CharacterEntity::class, RemoteKeysEntity::class],
+    version = 3,
+    exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun favoriteDao(): FavoriteDao
+    abstract fun characterDao(): CharacterDao
+    abstract fun remoteKeysDao(): RemoteKeysDao
 }

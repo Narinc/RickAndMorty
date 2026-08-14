@@ -1,17 +1,21 @@
 package com.narinc.rickandmorty.feature.character.data.repository
 
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.map
 import com.narinc.rickandmorty.core.common.DataResult
 import com.narinc.rickandmorty.core.common.DispatcherProvider
 import com.narinc.rickandmorty.core.common.safeApiCall
 import com.narinc.rickandmorty.core.network.RickAndMortyApiService
+import com.narinc.rickandmorty.feature.character.data.local.AppDatabase
 import com.narinc.rickandmorty.feature.character.data.mapper.toDomain
-import com.narinc.rickandmorty.feature.character.data.paging.CharacterPagingSource
+import com.narinc.rickandmorty.feature.character.data.paging.CharacterRemoteMediator
 import com.narinc.rickandmorty.feature.character.domain.model.Character
 import com.narinc.rickandmorty.feature.character.domain.repository.CharacterRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 /**
@@ -28,7 +32,8 @@ import javax.inject.Inject
  */
 class CharacterRepositoryImpl @Inject constructor(
     private val apiService: RickAndMortyApiService,
-    private val dispatcherProvider: DispatcherProvider
+    private val dispatcherProvider: DispatcherProvider,
+    private val database: AppDatabase
 ) : CharacterRepository {
 
     override suspend fun getCharacterDetail(id: Int): DataResult<Character> {
@@ -47,13 +52,12 @@ class CharacterRepositoryImpl @Inject constructor(
      * sonrası) için TAZE bir PagingSource örneği üretmesi gerekiyor, bu
      * yüzden var olan bir örneği değil, "nasıl üretileceğini" veriyoruz.
      */
+    @OptIn(ExperimentalPagingApi::class)
     override fun getCharacters(): Flow<PagingData<Character>> {
         return Pager(
-            config = PagingConfig(
-                pageSize = 20,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = { CharacterPagingSource(apiService) }
-        ).flow
+            config = PagingConfig(pageSize = 20, enablePlaceholders = false),
+            remoteMediator = CharacterRemoteMediator(apiService, database),
+            pagingSourceFactory = { database.characterDao().pagingSource() }
+        ).flow.map { pagingData -> pagingData.map { entity -> entity.toDomain() } }
     }
 }

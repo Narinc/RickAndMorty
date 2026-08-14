@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.narinc.rickandmorty.feature.character.data.local.AppDatabase
 import com.narinc.rickandmorty.feature.character.data.local.dao.FavoriteDao
+import com.narinc.rickandmorty.feature.character.data.local.migration.MIGRATION_2_3
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,7 +30,7 @@ object DatabaseModule {
             context,
             AppDatabase::class.java,
             "rick_and_morty.db"
-        ).build()
+        ).addMigrations(MIGRATION_2_3).build()
     }
 
     @Provides
