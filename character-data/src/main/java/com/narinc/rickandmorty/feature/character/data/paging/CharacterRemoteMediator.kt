@@ -40,7 +40,9 @@ class CharacterRemoteMediator(
     ): MediatorResult {
         return try {
             val page = when (loadType) {
-                LoadType.REFRESH -> 1
+                LoadType.REFRESH -> {
+                    1
+                }
 
                 LoadType.PREPEND -> {
                     // API'de "baştan öncesi" yok, PREPEND'i her zaman
