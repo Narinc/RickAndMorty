@@ -6,7 +6,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.narinc.rickandmorty.feature.character.detail.CharacterDetailScreen
-import com.narinc.rickandmorty.feature.character.list.CharacterListScreen
 import com.narinc.rickandmorty.navigation.Screen
 
 /**
@@ -27,10 +26,10 @@ fun RickAndMortyNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.CharacterList.route
+        startDestination = Screen.Main.route
     ) {
-        composable(route = Screen.CharacterList.route) {
-            CharacterListScreen(
+        composable(route = Screen.Main.route) {
+            MainScreen(
                 onCharacterClick = { characterId ->
                     navController.navigate(Screen.CharacterDetail.createRoute(characterId))
                 }

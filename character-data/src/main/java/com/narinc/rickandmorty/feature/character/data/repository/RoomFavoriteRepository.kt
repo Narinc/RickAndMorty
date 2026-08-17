@@ -2,8 +2,11 @@ package com.narinc.rickandmorty.feature.character.data.repository
 
 import com.narinc.rickandmorty.feature.character.data.local.dao.FavoriteDao
 import com.narinc.rickandmorty.feature.character.data.local.entity.FavoriteEntity
+import com.narinc.rickandmorty.feature.character.data.mapper.toDomain
+import com.narinc.rickandmorty.feature.character.domain.model.Character
 import com.narinc.rickandmorty.feature.character.domain.repository.FavoriteRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 /**
@@ -28,6 +31,12 @@ class RoomFavoriteRepository @Inject constructor(
             favoriteDao.delete(characterId)
         } else {
             favoriteDao.insert(FavoriteEntity(characterId))
+        }
+    }
+
+    override fun observeFavoriteCharacters(): Flow<List<Character>> {
+        return favoriteDao.observeFavoriteCharacters().map { entities ->
+            entities.map { it.toDomain() }
         }
     }
 }

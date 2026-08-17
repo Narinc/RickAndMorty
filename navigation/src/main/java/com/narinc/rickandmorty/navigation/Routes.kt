@@ -14,13 +14,12 @@ package com.narinc.rickandmorty.navigation
  * CharacterDetailScreen'i hiç bilmeyecek, sadece bu route'u bilecek.
  */
 sealed class Screen(val route: String) {
+    data object Main : Screen("main")
     data object CharacterList : Screen("character_list")
-
+    data object Favorites : Screen("favorites")
     data object CharacterDetail : Screen("character_detail/{characterId}") {
         const val ARG_CHARACTER_ID = "characterId"
 
-        fun createRoute(characterId: Int): String {
-            return "character_detail/$characterId"
-        }
+        fun createRoute(characterId: Int) = "character_detail/$characterId"
     }
 }

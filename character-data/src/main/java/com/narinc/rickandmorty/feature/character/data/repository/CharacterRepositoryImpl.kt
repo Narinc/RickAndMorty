@@ -11,6 +11,7 @@ import com.narinc.rickandmorty.core.common.safeApiCall
 import com.narinc.rickandmorty.core.network.RickAndMortyApiService
 import com.narinc.rickandmorty.feature.character.data.local.AppDatabase
 import com.narinc.rickandmorty.feature.character.data.mapper.toDomain
+import com.narinc.rickandmorty.feature.character.data.mapper.toEntity
 import com.narinc.rickandmorty.feature.character.data.paging.CharacterRemoteMediator
 import com.narinc.rickandmorty.feature.character.domain.model.Character
 import com.narinc.rickandmorty.feature.character.domain.repository.CharacterRepository
@@ -38,7 +39,9 @@ class CharacterRepositoryImpl @Inject constructor(
 
     override suspend fun getCharacterDetail(id: Int): DataResult<Character> {
         return safeApiCall(dispatcherProvider) {
-            apiService.getCharacterDetail(id).toDomain()
+            val dto = apiService.getCharacterDetail(id)
+            database.characterDao().insertAll(listOf(dto.toEntity()))
+            dto.toDomain()
         }
     }
 

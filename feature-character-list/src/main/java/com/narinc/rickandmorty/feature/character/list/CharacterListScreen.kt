@@ -1,25 +1,23 @@
 package com.narinc.rickandmorty.feature.character.list
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import com.narinc.rickandmorty.core.ui.characterlistitem.CharacterListItem
 import com.narinc.rickandmorty.feature.character.domain.model.Character
 
 /**
@@ -59,8 +57,8 @@ private fun CharacterList(
         ) { index ->
             val character = lazyPagingItems[index]
             if (character != null) {
-                CharacterRow(
-                    character = character,
+                CharacterListItem(
+                    item = character.toCharacterListItemUiModel(),
                     onClick = { onCharacterClick(character.id) }
                 )
                 HorizontalDivider()
@@ -96,17 +94,6 @@ private fun CharacterList(
 
             else -> Unit
         }
-    }
-}
-
-@Composable
-private fun CharacterRow(character: Character, onClick: () -> Unit) {
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .clickable(onClick = onClick)
-        .padding(16.dp)) {
-        Text(text = character.name, style = MaterialTheme.typography.titleMedium)
-        Text(text = character.species, style = MaterialTheme.typography.bodySmall)
     }
 }
 
