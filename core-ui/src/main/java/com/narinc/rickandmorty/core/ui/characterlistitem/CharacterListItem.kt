@@ -11,14 +11,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CharacterListItem(character: CharacterListItemUiModel, onClick: () -> Unit) {
+fun CharacterListItem(item: CharacterListItemUiModel, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
             .padding(16.dp)
     ) {
-        Text(text = character.title, style = MaterialTheme.typography.titleMedium)
-        Text(text = character.subtitle, style = MaterialTheme.typography.bodySmall)
+        Text(text = item.title, style = MaterialTheme.typography.titleMedium)
+        Text(text = item.subtitle, style = MaterialTheme.typography.bodySmall)
     }
 }
