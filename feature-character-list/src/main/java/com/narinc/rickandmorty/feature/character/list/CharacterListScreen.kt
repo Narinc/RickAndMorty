@@ -58,7 +58,7 @@ private fun CharacterList(
             val character = lazyPagingItems[index]
             if (character != null) {
                 CharacterListItem(
-                    character = character.toUiModel(),
+                    character = character.toCharacterListItemUiModel(),
                     onClick = { onCharacterClick(character.id) }
                 )
                 HorizontalDivider()
