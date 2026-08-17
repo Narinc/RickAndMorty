@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CharacterListItem(character: CharacterUIModel, onClick: () -> Unit) {
+fun CharacterListItem(character: CharacterListItemUiModel, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
