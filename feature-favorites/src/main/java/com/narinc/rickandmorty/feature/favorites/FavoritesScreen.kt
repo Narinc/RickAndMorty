@@ -35,7 +35,7 @@ fun FavoritesScreen(
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(favorites, key = { it.id }) { character ->
                 CharacterListItem(
-                    character = character.toUiModel(),
+                    item = character.toUiModel(),
                     onClick = { onCharacterClick(character.id) }
                 )
                 HorizontalDivider()
