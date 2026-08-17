@@ -1,5 +1,6 @@
 package com.narinc.rickandmorty.feature.character.domain.repository
 
+import com.narinc.rickandmorty.feature.character.domain.model.Character
 import kotlinx.coroutines.flow.Flow
 
 interface FavoriteRepository {
@@ -13,4 +14,6 @@ interface FavoriteRepository {
     fun observeIsFavorite(characterId: Int): Flow<Boolean>
 
     suspend fun toggleFavorite(characterId: Int)
+
+    fun observeFavoriteCharacters(): Flow<List<Character>>
 }

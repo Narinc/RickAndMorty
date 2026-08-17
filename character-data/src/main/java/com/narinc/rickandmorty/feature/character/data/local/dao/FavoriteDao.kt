@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.narinc.rickandmorty.feature.character.data.local.entity.CharacterEntity
 import com.narinc.rickandmorty.feature.character.data.local.entity.FavoriteEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -27,6 +28,15 @@ interface FavoriteDao {
 
     @Query("SELECT EXISTS(SELECT 1 FROM favorites WHERE characterId = :characterId)")
     fun observeIsFavorite(characterId: Int): Flow<Boolean>
+
+    @Query(
+        """
+    SELECT characters.* FROM characters
+    INNER JOIN favorites ON characters.id = favorites.characterId
+    ORDER BY characters.name ASC
+    """ // TODO daha sonra eklenme sirasina gore siralayacak sekilde gelistirme yapariz. Migration test yapariz.
+    )
+    fun observeFavoriteCharacters(): Flow<List<CharacterEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(favorite: FavoriteEntity)

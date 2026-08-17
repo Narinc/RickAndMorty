@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.compose.ui.tooling.preview)
     debugImplementation(libs.compose.ui.tooling)
     implementation(libs.compose.material3)
+    implementation(libs.compose.icons.extended)
     implementation(libs.activity.compose)
     implementation(libs.lifecycle.runtime.ktx)
 
@@ -69,10 +70,11 @@ dependencies {
     // Şimdilik sadece character dikeyini bağlıyoruz
     implementation(project(":core-common"))
     implementation(project(":core-network"))
+    implementation(project(":core-ui"))
     implementation(project(":character-domain"))
     implementation(project(":character-data"))
     implementation(project(":feature-character-detail"))
     implementation(project(":feature-character-list"))
+    implementation(project(":feature-favorites"))
     implementation(project(":navigation"))
-
 }
