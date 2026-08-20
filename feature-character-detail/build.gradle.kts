@@ -32,7 +32,7 @@ kotlin {
 dependencies {
     implementation(project(":core-common"))
     implementation(project(":character-domain"))
-    implementation(project(":character-data"))   // şimdilik Hilt binding'i burada kuracağız
+    implementation(project(":character-data"))
 
     // Hilt
     implementation(libs.hilt.android)
